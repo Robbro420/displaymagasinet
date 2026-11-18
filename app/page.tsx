@@ -3,13 +3,15 @@ import { Newsletter } from "./components/newsletter";
 import { newsletterEnabled, shopUrl } from "./site";
 
 const articles = [
-  { tag: "Display", title: "Så bygger du räckvidd utan att bränna hela budgeten", text: "En enkel plan för smart frekvens, relevanta sajter och tydlig uppföljning.", color: "lime" },
-  { tag: "SEO", title: "Sök + display: kombinationen som fångar både behov och nyfikenhet", text: "Låt sökdata styra budskapet och display skapa efterfrågan innan kunden googlar.", color: "blue" },
-  { tag: "Webb-tv", title: "Rörligt som känns stort – även för ett mindre företag", text: "Tre format, två budskap och en realistisk startbudget för video på premiumwebb.", color: "coral" },
-  { tag: "Guide", title: "Från 5 000 till 50 000 kr: välj rätt kampanjnivå", text: "Vad du faktiskt kan förvänta dig när budget, målgrupp och geografi förändras.", color: "violet" },
-  { tag: "Kreativitet", title: "Fem rubriker som gör en displayannons lättare att klicka på", text: "Konkreta exempel för tjänster, handel och lokal försäljning – redo att anpassa.", color: "yellow" },
-  { tag: "Mätning", title: "Mät rätt: från visning till affär utan krångliga rapporter", text: "De fyra siffrorna du behöver för att avgöra om kampanjen ska skalas upp.", color: "teal" },
-];
+  { tag: "Display", title: "Så bygger du räckvidd utan att bränna hela budgeten", text: "En enkel plan för smart frekvens, relevanta sajter och tydlig uppföljning.", color: "lime", art: "panorama" },
+  { tag: "SEO", title: "Sök + display: kombinationen som fångar både behov och nyfikenhet", text: "Låt sökdata styra budskapet och display skapa efterfrågan innan kunden googlar.", color: "blue", art: "search" },
+  { tag: "Webb-tv", title: "Rörligt som känns stort – även för ett mindre företag", text: "Tre format, två budskap och en realistisk startbudget för video på premiumwebb.", color: "coral", art: "video" },
+  { tag: "Guide", title: "Från 5 000 till 50 000 kr: välj rätt kampanjnivå", text: "Vad du faktiskt kan förvänta dig när budget, målgrupp och geografi förändras.", color: "violet", art: "levels" },
+  { tag: "Kreativitet", title: "Fem rubriker som gör en displayannons lättare att klicka på", text: "Konkreta exempel för tjänster, handel och lokal försäljning – redo att anpassa.", color: "yellow", art: "headline" },
+  { tag: "Mätning", title: "Mät rätt: från visning till affär utan krångliga rapporter", text: "De fyra siffrorna du behöver för att avgöra om kampanjen ska skalas upp.", color: "teal", art: "chart" },
+] as const;
+
+type ArtKind = (typeof articles)[number]["art"];
 
 const formats = [
   { icon: "display", title: "Displayannonsering", text: "Bygg kännedom och trafik med snygga annonser på relevanta svenska sajter." },
@@ -70,22 +72,13 @@ export default function Home() {
                 Hitta rätt kampanj →
               </a>
             </div>
-            <div className="proof">
-              <div aria-hidden="true">
-                <span>AN</span>
-                <span>JL</span>
-                <span>MK</span>
-              </div>
-              <p>
-                <b>Praktiskt, begripligt, affärsnära.</b>
-                <br />
-                För företagare i hela Sverige.
-              </p>
-            </div>
+            <p className="proof">
+              <b>Praktiskt, begripligt, affärsnära.</b> För företagare i hela Sverige.
+            </p>
           </div>
 
           <aside className="hero-card" aria-labelledby="snabbguide-title">
-            <small>VECKANS SNABBGUIDE</small>
+            <small>Veckans snabbguide</small>
             <div className="ad" aria-hidden="true">
               <span>DISPLAY</span>
               <b>
@@ -120,8 +113,7 @@ export default function Home() {
             {articles.map((a, i) => (
               <article key={a.title}>
                 <div className={`art ${a.color}`} aria-hidden="true">
-                  <span>{a.tag}</span>
-                  <b>{i % 2 ? "◌ ◌ ◌" : "╱ ╱ ╱"}</b>
+                  <ArticleArt kind={a.art} />
                 </div>
                 <div className="article-body">
                   <div className="meta">
@@ -151,9 +143,8 @@ export default function Home() {
             light
           />
           <div className="format-grid">
-            {formats.map((f, i) => (
+            {formats.map((f) => (
               <article key={f.title}>
-                <small aria-hidden="true">0{i + 1}</small>
                 <FormatIcon name={f.icon} />
                 <h3>{f.title}</h3>
                 <p>{f.text}</p>
@@ -267,6 +258,77 @@ function FormatIcon({ name }: { name: "display" | "video" | "search" }) {
     <svg {...common}>
       <circle cx="17" cy="17" r="11" />
       <path d="M25.5 25.5L36 36" />
+    </svg>
+  );
+}
+
+/**
+ * Små skisser till artikelkorten: en sajtsida där det som artikeln handlar om
+ * – annonsytan, sökträffen, videon, kurvan – är markerat i mörkt.
+ */
+function ArticleArt({ kind }: { kind: ArtKind }) {
+  const line = { stroke: "#16261d", strokeOpacity: 0.22, strokeWidth: 5, strokeLinecap: "round" } as const;
+  const ink = "#16261d";
+
+  return (
+    <svg viewBox="0 0 180 132" fill="none">
+      <rect width="180" height="132" fill="#fff" fillOpacity="0.72" />
+      <circle cx="12" cy="11" r="3" fill={ink} fillOpacity="0.3" />
+      <circle cx="23" cy="11" r="3" fill={ink} fillOpacity="0.3" />
+      <path d="M0 22h180" stroke={ink} strokeOpacity="0.14" />
+
+      {kind === "panorama" && (
+        <>
+          <rect x="14" y="34" width="152" height="34" fill={ink} />
+          <path d="M26 51h54" stroke="#d7ec5b" strokeWidth="5" strokeLinecap="round" />
+          <path d="M14 84h66M14 98h52M14 112h60M100 84h66M100 98h66M100 112h40" {...line} />
+        </>
+      )}
+
+      {kind === "search" && (
+        <>
+          <rect x="14" y="34" width="152" height="22" rx="11" stroke={ink} strokeWidth="2.5" />
+          <circle cx="29" cy="45" r="4.5" stroke={ink} strokeWidth="2.5" />
+          <path d="M32.5 48.5l4 4" stroke={ink} strokeWidth="2.5" strokeLinecap="round" />
+          <rect x="14" y="68" width="152" height="24" fill={ink} />
+          <path d="M24 80h70" stroke="#d7ec5b" strokeWidth="5" strokeLinecap="round" />
+          <path d="M14 106h110M14 120h84" {...line} />
+        </>
+      )}
+
+      {kind === "video" && (
+        <>
+          <rect x="14" y="34" width="152" height="70" fill={ink} />
+          <path d="M80 54l26 15-26 15z" fill="#fff" />
+          <path d="M14 118h152" {...line} />
+          <path d="M14 118h58" stroke={ink} strokeWidth="5" strokeLinecap="round" />
+        </>
+      )}
+
+      {kind === "levels" && (
+        <>
+          <rect x="22" y="92" width="34" height="28" fill={ink} fillOpacity="0.35" />
+          <rect x="73" y="68" width="34" height="52" fill={ink} fillOpacity="0.6" />
+          <rect x="124" y="38" width="34" height="82" fill={ink} />
+          <path d="M14 120h152" stroke={ink} strokeWidth="2.5" />
+        </>
+      )}
+
+      {kind === "headline" && (
+        <>
+          <rect x="14" y="34" width="152" height="86" fill={ink} />
+          <path d="M28 54h112M28 72h78" stroke="#fff" strokeWidth="8" strokeLinecap="round" />
+          <rect x="28" y="92" width="50" height="16" fill="#d7ec5b" />
+        </>
+      )}
+
+      {kind === "chart" && (
+        <>
+          <path d="M14 46v74h152" stroke={ink} strokeOpacity="0.3" strokeWidth="2.5" />
+          <path d="M26 106l32-14 28 6 30-30 38-22" stroke={ink} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="154" cy="46" r="6" fill={ink} />
+        </>
+      )}
     </svg>
   );
 }

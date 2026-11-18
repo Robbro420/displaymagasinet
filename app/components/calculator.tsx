@@ -16,8 +16,8 @@ export function Calculator() {
   return (
     <div className="calculator">
       <div className="calc-top">
-        <span>MIN KAMPANJ</span>
-        <b>ESTIMAT</b>
+        <span>Min kampanj</span>
+        <b>Estimat</b>
       </div>
 
       <span className="calc-label" id="goal-label">
@@ -47,6 +47,7 @@ export function Calculator() {
         max="50000"
         step="5000"
         value={budget}
+        style={{ "--fill": `${((budget - 5000) / 45000) * 100}%` } as React.CSSProperties}
         onChange={(e) => setBudget(Number(e.target.value))}
       />
       <div className="range" aria-hidden="true">
@@ -55,9 +56,10 @@ export function Calculator() {
       </div>
 
       <div className="estimate" aria-live="polite">
-        <span>Uppskattad synlighet</span>
-        <strong>≈ {impressions.toLocaleString("sv-SE")} visningar</strong>
-        <small>Indikativt estimat · faktiskt utfall varierar</small>
+        <span>Uppskattad synlighet per månad</span>
+        <strong>≈ {impressions.toLocaleString("sv-SE")}</strong>
+        <em>visningar</em>
+        <small>Indikativt estimat – faktiskt utfall varierar.</small>
       </div>
 
       <a className="button" href={shopLink} target="_blank" rel="noopener noreferrer">

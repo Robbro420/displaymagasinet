@@ -1,6 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import { Newsreader, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import { siteDescription, siteName, siteUrl } from "./site";
+
+// Newsreader är ritat för nyhetsläsning och Schibsted Grotesk kommer från
+// nordisk dagspress – båda hör hemma i den miljö annonserna visas i.
+const serif = Newsreader({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const sans = Schibsted_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -37,7 +53,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="sv">
+    <html lang="sv" className={`${serif.variable} ${sans.variable}`}>
       <body>{children}</body>
     </html>
   );
